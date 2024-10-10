@@ -1,0 +1,7 @@
+body.barcode-scanner-active {
+    visibility: hidden;
+}
+
+.barcode-scanner-modal {
+    visibility: visible;
+}

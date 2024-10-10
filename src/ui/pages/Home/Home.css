@@ -1,0 +1,16 @@
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 10px;
+}
+
+IonButton {
+    font-size: 16px;
+    font-weight: bold;
+    --background: var(--ion-color-primary);
+    --background-activated: var(--ion-color-primary-shade);
+    --background-hover: var(--ion-color-primary-tint);
+    --border-radius: 8px;
+}
