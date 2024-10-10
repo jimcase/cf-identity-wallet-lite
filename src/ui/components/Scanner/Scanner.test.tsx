@@ -26,6 +26,7 @@ import { CustomInputProps } from "../CustomInput/CustomInput.types";
 import { TabsRoutePath } from "../navigation/TabsMenu";
 import { Scanner } from "./Scanner";
 import { setOpenConnectionId } from "../../../store/reducers/connectionsCache";
+import { identifierFix } from "../../__fixtures__/identifierFix";
 
 jest.mock("@ionic/react", () => ({
   ...jest.requireActual("@ionic/react"),
@@ -143,6 +144,9 @@ describe("Scanner", () => {
       },
       currentOperation: OperationType.SCAN_WALLET_CONNECTION,
       toastMsgs: [],
+    },
+    identifiersCache: {
+      identifiers: identifierFix,
     },
   };
 

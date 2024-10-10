@@ -29,6 +29,7 @@ import {
   updateOrAddMultisigConnectionCache,
 } from "../../../store/reducers/connectionsCache";
 import {
+  getIdentifiersCache,
   getMultiSigGroupCache,
   getScanGroupId,
   setMultiSigGroupCache,
@@ -55,6 +56,7 @@ import { OptionModal } from "../OptionsModal";
 import { PageFooter } from "../PageFooter";
 import "./Scanner.scss";
 import { ErrorMessage, ScannerProps } from "./Scanner.types";
+import { Alert } from "../Alert";
 
 const Scanner = forwardRef(
   (
@@ -83,6 +85,11 @@ const Scanner = forwardRef(
     const [permission, setPermisson] = useState(false);
     const [mobileweb, setMobileweb] = useState(false);
     const [scanUnavailable, setScanUnavailable] = useState(false);
+    const [openIdentifierMissingAlert, setOpenIdentifierMissingAlert] =
+      useState<boolean>(false);
+    const defaultIdentifierCache = useAppSelector(getIdentifiersCache).filter(
+      (identifier) => !identifier.multisigManageAid && !identifier.groupMetadata
+    );
 
     useEffect(() => {
       if (platforms.includes("mobileweb")) {
@@ -119,14 +126,19 @@ const Scanner = forwardRef(
 
     const handleConnectWallet = (id: string) => {
       if (/^b[1-9A-HJ-NP-Za-km-z]{33}/.test(id)) {
+        if (defaultIdentifierCache.length === 0) {
+          setOpenIdentifierMissingAlert(true);
+          return;
+        }
+
         dispatch(setToastMsg(ToastMsgType.PEER_ID_SUCCESS));
         dispatch(
           setPendingConnection({
             id,
           })
         );
-        dispatch(setCurrentOperation(OperationType.IDLE));
-        handleReset && handleReset();
+        dispatch(setCurrentOperation(OperationType.SHOW_CONNECT_WALLET));
+        handleReset && handleReset(TabsRoutePath.MENU);
       } else {
         dispatch(setToastMsg(ToastMsgType.PEER_ID_ERROR));
       }
@@ -523,6 +535,14 @@ const Scanner = forwardRef(
       "scan-unavaible": scanUnavailable,
     });
 
+    const closeIdentifierMissingAlert = () => {
+      setOpenIdentifierMissingAlert(false);
+    };
+
+    const handleCreateIdentifier = () => {
+      setCreateIdentifierModalIsOpen(true);
+    };
+
     return (
       <>
         <IonGrid
@@ -594,6 +614,24 @@ const Scanner = forwardRef(
             value={pastedValue}
           />
         </OptionModal>
+        <Alert
+          isOpen={openIdentifierMissingAlert}
+          setIsOpen={setOpenIdentifierMissingAlert}
+          dataTestId="alert-create-keri"
+          className="alert-create-identifier"
+          headerText={i18n.t(
+            "menu.tab.items.connectwallet.connectionhistory.missingidentifieralert.message"
+          )}
+          confirmButtonText={`${i18n.t(
+            "menu.tab.items.connectwallet.connectionhistory.missingidentifieralert.confirm"
+          )}`}
+          cancelButtonText={`${i18n.t(
+            "menu.tab.items.connectwallet.connectionhistory.missingidentifieralert.cancel"
+          )}`}
+          actionConfirm={handleCreateIdentifier}
+          actionCancel={closeIdentifierMissingAlert}
+          actionDismiss={closeIdentifierMissingAlert}
+        />
       </>
     );
   }

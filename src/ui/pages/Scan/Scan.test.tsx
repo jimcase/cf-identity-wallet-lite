@@ -14,6 +14,7 @@ import { connectionsFix } from "../../__fixtures__/connectionsFix";
 import { OperationType } from "../../globals/types";
 import { Scan } from "./Scan";
 import { StorageMessage } from "../../../core/storage/storage.types";
+import { identifierFix } from "../../__fixtures__/identifierFix";
 
 const addListener = jest.fn(
   (eventName: string, listenerFunc: (result: BarcodeScannedEvent) => void) => {
@@ -170,6 +171,9 @@ describe("Scan Tab", () => {
         },
         currentOperation: OperationType.IDLE,
         toastMsgs: [],
+      },
+      identifiersCache: {
+        identifiers: identifierFix,
       },
     };
 

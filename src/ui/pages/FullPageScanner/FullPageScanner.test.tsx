@@ -17,6 +17,7 @@ import {
 import { connectionsFix } from "../../__fixtures__/connectionsFix";
 import { OperationType } from "../../globals/types";
 import { FullPageScanner } from "./FullPageScanner";
+import { identifierFix } from "../../__fixtures__/identifierFix";
 
 const addListener = jest.fn(
   (eventName: string, listenerFunc: (result: BarcodeScannedEvent) => void) => {
@@ -132,6 +133,9 @@ describe("Full page scanner", () => {
       currentOperation: OperationType.SCAN_WALLET_CONNECTION,
       toastMsgs: [],
     },
+    identifiersCache: {
+      identifiers: identifierFix,
+    },
   };
 
   const dispatchMock = jest.fn();
@@ -174,6 +178,9 @@ describe("Full page scanner", () => {
         },
         currentOperation: OperationType.MULTI_SIG_RECEIVER_SCAN,
         toastMsgs: [],
+      },
+      identifiersCache: {
+        identifiers: identifierFix,
       },
     };
 
@@ -218,6 +225,9 @@ describe("Full page scanner", () => {
         },
         currentOperation: OperationType.MULTI_SIG_RECEIVER_SCAN,
         toastMsgs: [],
+      },
+      identifiersCache: {
+        identifiers: identifierFix,
       },
     };
 
@@ -285,6 +295,9 @@ describe("Full page scanner", () => {
         },
         currentOperation: OperationType.MULTI_SIG_RECEIVER_SCAN,
         toastMsgs: [],
+      },
+      identifiersCache: {
+        identifiers: identifierFix,
       },
     };
 

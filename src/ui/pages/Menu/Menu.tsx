@@ -13,11 +13,13 @@ import {
   linkOutline,
   chatbubbleOutline,
 } from "ionicons/icons";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Browser } from "@capacitor/browser";
 import { TabLayout } from "../../components/layout/TabLayout";
-import { useAppDispatch } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
+  getCurrentOperation,
+  setCurrentOperation,
   setCurrentRoute,
   showConnections,
 } from "../../../store/reducers/stateCache";
@@ -29,10 +31,12 @@ import { MenuItemProps, SubMenuKey } from "./Menu.types";
 import { CHAT_LINK, CRYPTO_LINK } from "../../globals/constants";
 import { emptySubMenu, SubMenuItems } from "./components/SubMenuItems";
 import MenuItem from "./components/MenuItem";
+import { OperationType } from "../../globals/types";
 
 const Menu = () => {
   const pageId = "menu-tab";
   const dispatch = useAppDispatch();
+  const currentOperation = useAppSelector(getCurrentOperation);
   const [showSubMenu, setShowSubMenu] = useState(false);
   const [selectedOption, setSelectedOption] = useState<
     SubMenuKey | undefined
@@ -98,6 +102,13 @@ const Menu = () => {
       subLabel: `${i18n.t("menu.tab.items.chat.sublabel")}`,
     },
   ];
+
+  useEffect(() => {
+    if (currentOperation === OperationType.SHOW_CONNECT_WALLET) {
+      showSelectedOption(SubMenuKey.ConnectWallet);
+      dispatch(setCurrentOperation(OperationType.IDLE));
+    }
+  }, [currentOperation, dispatch]);
 
   const showSelectedOption = (key: SubMenuKey) => {
     if (
